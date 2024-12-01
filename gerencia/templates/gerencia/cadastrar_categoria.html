@@ -1,0 +1,25 @@
+{% extends 'base_gerencia.html' %}
+
+{% block main %}
+
+<h2>Cadastro de Categoria</h2>
+<form action="" method="post" class="">
+    {% csrf_token %}
+    <div>
+        <label for="nome"></label>
+        {{form.nome}}
+    </div>
+    <input type="submit">
+</form>
+
+<div>
+    <h2>Lista - Categorias:</h2>
+    {% for categoria in categorias %}
+        <div>
+            <p>{{categoria.nome}}</p>
+            <a href="{% url 'gerencia:editar_categoria' categoria.id %}">Editar</a>
+            <a href="{% url 'gerencia:excluir_categoria' categoria.id %}">Excluir</a>
+        </div>
+    {% endfor %}
+</div>
+{%endblock%}
