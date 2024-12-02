@@ -99,7 +99,15 @@ def cadastrar_categoria(request):
             return redirect('gerencia:cadastrar_categoria')
     else:
         form = CategoriaForm()
-    categorias = Categoria.objects.all()
+    categorias_lista = Categoria.objects.all().order_by('nome')
+
+    paginator = Paginator(categorias_lista, 2)  
+    
+    page = request.GET.get('page', 1)
+    try:
+        categorias = paginator.page(page)
+    except:
+        categorias = paginator.page(1)
 
     return render(request, 'gerencia/cadastrar_categoria.html', {'form': form, 'categorias': categorias})
 
@@ -140,5 +148,6 @@ def paginando(request):
         categorias = paginator.page(1)
     
     return render(request, 'gerencia/cadastrar_categoria.html', {
-        'categorias': categorias
+        'categorias': categorias,
+        "paginator": paginator
     })
