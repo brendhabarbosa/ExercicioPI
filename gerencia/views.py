@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .models import Noticia, Categoria
 from .forms import CategoriaForm
+from django.core.paginator import Paginator
 # Create your views here.
 @login_required
 def inicio_gerencia(request):
@@ -127,3 +128,17 @@ def filtrar_categoria(request):
     else:
         categorias = Categoria.objects.none()
     return render(request, 'gerencia/filtrar_categoria.html', {'categorias': categorias})
+
+def paginando(request):
+    categorias_lista = Categoria.objects.all().order_by('nome')
+    paginator = Paginator(categorias_lista, 2)  
+    
+    page = request.GET.get('page', 1)
+    try:
+        categorias = paginator.page(page)
+    except:
+        categorias = paginator.page(1)
+    
+    return render(request, 'gerencia/cadastrar_categoria.html', {
+        'categorias': categorias
+    })
