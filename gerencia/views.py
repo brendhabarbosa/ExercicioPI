@@ -91,7 +91,8 @@ def index(request):
         'search_query': search_query,
     }
     return render(request, 'gerencia/index.html', contexto)
-    
+
+@login_required  
 def cadastrar_categoria(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
@@ -115,6 +116,7 @@ def cadastrar_categoria(request):
 
     return render(request, 'gerencia/cadastrar_categoria.html', {'form': form, 'categorias': categorias})
 
+@login_required
 def editar_categoria(request,id):
     categoria=Categoria.objects.get(id=id)
     if request.method =='POST':
@@ -131,11 +133,13 @@ def editar_categoria(request,id):
         form=CategoriaForm(instance=categoria)
     return render(request, 'gerencia/cadastrar_categoria.html', {'form': form})
 
+@login_required
 def excluir_categoria(request, id):
     categoria=Categoria.objects.get(id=id)
     categoria.delete()
     return redirect('gerencia:cadastrar_categoria')
 
+@login_required
 def filtrar_categoria(request):
     filtro=request.GET.get('search')
     if filtro:
