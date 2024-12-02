@@ -1,0 +1,13 @@
+{% extends 'base_gerencia.html' %}
+{% block main %}
+<div>
+    <h2>Lista - Categorias:</h2>
+    {% for categoria in categorias %}
+        <div>
+            <p>{{categoria.nome}}</p>
+            <a href="{% url 'gerencia:editar_categoria' categoria.id %}">Editar</a>
+            <a href="{% url 'gerencia:excluir_categoria' categoria.id %}">Excluir</a>
+        </div>
+    {% endfor %}
+</div>
+{%endblock%}
