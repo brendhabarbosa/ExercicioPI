@@ -5,6 +5,7 @@ from django.shortcuts import render
 from .models import Noticia, Categoria
 from .forms import CategoriaForm
 from django.core.paginator import Paginator
+from django.http import HttpResponse
 # Create your views here.
 @login_required
 def inicio_gerencia(request):
@@ -95,7 +96,10 @@ def cadastrar_categoria(request):
     if request.method == 'POST':
         form = CategoriaForm(request.POST)
         if form.is_valid():
-            categoria = form.save()
+            categoria_existente = Categoria.objects.filter(nome=form.cleaned_data['nome']).first()
+            if categoria_existente:
+                return HttpResponse('Essa categoria já foi cadastrada. Tente cadastrar outra')
+            form.save()
             return redirect('gerencia:cadastrar_categoria')
     else:
         form = CategoriaForm()
@@ -116,6 +120,9 @@ def editar_categoria(request,id):
     if request.method =='POST':
         form=CategoriaForm(request.POST, instance=categoria)
         if form.is_valid():
+            categoria_existente = Categoria.objects.filter(nome=form.cleaned_data['nome']).first()
+            if categoria_existente:
+                return HttpResponse('Essa categoria já foi cadastrada. Tente cadastrar outra')
             form.save()
             return redirect('gerencia:cadastrar_categoria')
         else:
